@@ -1,0 +1,320 @@
+{
+  "entities": {
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized Live The World administrator account and role record.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "minLength": 5, "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "role": { "type": "string", "enum": ["super_admin", "operations_manager", "content_editor", "support_agent"] },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "phone": { "type": "string", "maxLength": 30 },
+        "inviteId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "status", "createdAt", "updatedAt"]
+    },
+    "AdminInvite": {
+      "title": "AdminInvite",
+      "description": "Email-keyed invitation allowing an administrator to claim an assigned role on first Google sign-in.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "minLength": 5, "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["super_admin", "operations_manager", "content_editor", "support_agent"] },
+        "invitedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "displayName", "role", "invitedBy", "createdAt"]
+    },
+    "Destination": {
+      "title": "Destination",
+      "description": "Travel destination managed by Live The World (e.g., Shimla, Manali, Kasol, Spiti Valley).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "slug": { "type": "string", "minLength": 2, "maxLength": 120, "pattern": "^[a-z0-9_\\-]+$" },
+        "region": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["Hill Station", "Adventure Hub", "Riverside & Trek", "High-Altitude Expedition", "Spiritual & Heritage"] },
+        "shortDescription": { "type": "string", "minLength": 2, "maxLength": 300 },
+        "description": { "type": "string", "minLength": 2, "maxLength": 4000 },
+        "bestSeason": { "type": "string", "maxLength": 100 },
+        "elevation": { "type": "string", "maxLength": 60 },
+        "imageUrl": { "type": "string", "maxLength": 250000 },
+        "featured": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "slug", "region", "category", "shortDescription", "description", "featured", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "TourPackage": {
+      "title": "TourPackage",
+      "description": "Curated travel & adventure tour package linked to a destination.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 3, "maxLength": 150 },
+        "slug": { "type": "string", "minLength": 2, "maxLength": 150, "pattern": "^[a-z0-9_\\-]+$" },
+        "destinationId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "destinationName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["Hill Retreat", "Adventure Sports", "Riverside Escape", "Snow Expedition", "Family Holiday", "Backpacking"] },
+        "durationDays": { "type": "integer" },
+        "durationNights": { "type": "integer" },
+        "pricePerPerson": { "type": "number" },
+        "discountPercent": { "type": "number" },
+        "maxGroupSize": { "type": "integer" },
+        "difficulty": { "type": "string", "enum": ["Easy", "Moderate", "Challenging"] },
+        "inclusions": { "type": "array" },
+        "itinerary": { "type": "array" },
+        "imageUrl": { "type": "string", "maxLength": 250000 },
+        "galleryImages": { "type": "array" },
+        "featured": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "slug", "destinationId", "destinationName", "category", "durationDays", "durationNights", "pricePerPerson", "maxGroupSize", "difficulty", "featured", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Traveler customer profile and contact record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "minLength": 5, "maxLength": 160 },
+        "phone": { "type": "string", "minLength": 6, "maxLength": 30 },
+        "city": { "type": "string", "maxLength": 100 },
+        "country": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["active", "vip", "inactive"] },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fullName", "email", "phone", "status", "createdAt", "updatedAt"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Customer travel booking with package, vehicle, passenger details, and payment status.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "bookingCode": { "type": "string", "minLength": 4, "maxLength": 32 },
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "customerEmail": { "type": "string", "format": "email", "minLength": 5, "maxLength": 160 },
+        "customerPhone": { "type": "string", "minLength": 6, "maxLength": 30 },
+        "destinationId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "destinationName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "packageId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "packageTitle": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "vehicleId": { "type": "string", "maxLength": 128 },
+        "vehicleName": { "type": "string", "maxLength": 120 },
+        "travelDate": { "type": "string", "minLength": 8, "maxLength": 32 },
+        "returnDate": { "type": "string", "minLength": 8, "maxLength": 32 },
+        "adults": { "type": "integer" },
+        "children": { "type": "integer" },
+        "passengerDetails": { "type": "string", "maxLength": 1000 },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["pending", "partial", "paid", "refunded"] },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Card", "Bank Transfer", "Cash"] },
+        "bookingStatus": { "type": "string", "enum": ["pending", "confirmed", "completed", "cancelled"] },
+        "specialRequests": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "bookingCode", "customerId", "customerName", "customerEmail", "customerPhone", "destinationId", "destinationName", "packageId", "packageTitle", "travelDate", "returnDate", "adults", "children", "totalAmount", "paidAmount", "paymentStatus", "paymentMethod", "bookingStatus", "createdAt", "updatedAt"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Booking payment transaction ledger entry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "bookingId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "bookingCode": { "type": "string", "minLength": 4, "maxLength": 32 },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["UPI", "Card", "Bank Transfer", "Cash"] },
+        "transactionRef": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["paid", "pending", "failed", "refunded"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "bookingId", "bookingCode", "customerName", "amount", "method", "status", "createdAt", "updatedAt"]
+    },
+    "Enquiry": {
+      "title": "Enquiry",
+      "description": "Contact form enquiry, tour enquiry, or customer message.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["contact", "tour", "custom_trip"] },
+        "senderName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "senderEmail": { "type": "string", "format": "email", "minLength": 5, "maxLength": 160 },
+        "senderPhone": { "type": "string", "maxLength": 30 },
+        "subject": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "packageTitle": { "type": "string", "maxLength": 150 },
+        "preferredDate": { "type": "string", "maxLength": 32 },
+        "travelersCount": { "type": "integer" },
+        "message": { "type": "string", "minLength": 2, "maxLength": 2500 },
+        "status": { "type": "string", "enum": ["new", "in_progress", "resolved", "closed"] },
+        "adminReply": { "type": "string", "maxLength": 2500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "senderName", "senderEmail", "subject", "message", "status", "createdAt", "updatedAt"]
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Mountain fleet vehicle for transportation management.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["SUV", "4x4 Jeep", "Tempo Traveller", "Luxury Sedan"] },
+        "registrationNo": { "type": "string", "minLength": 3, "maxLength": 32 },
+        "seatCapacity": { "type": "integer" },
+        "pricePerDay": { "type": "number" },
+        "pricePerKm": { "type": "number" },
+        "driverName": { "type": "string", "maxLength": 120 },
+        "driverPhone": { "type": "string", "maxLength": 30 },
+        "acAvailable": { "type": "boolean" },
+        "imageUrl": { "type": "string", "maxLength": 250000 },
+        "status": { "type": "string", "enum": ["available", "on_trip", "maintenance"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "category", "registrationNo", "seatCapacity", "pricePerDay", "acAvailable", "status", "createdAt", "updatedAt"]
+    },
+    "CmsItem": {
+      "title": "CmsItem",
+      "description": "Website content item for homepage, about us, services, gallery, testimonials, FAQs, and blog posts.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "section": { "type": "string", "enum": ["homepage", "about", "services", "gallery", "testimonials", "faqs", "blog"] },
+        "title": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "subtitle": { "type": "string", "maxLength": 300 },
+        "body": { "type": "string", "maxLength": 6000 },
+        "authorName": { "type": "string", "maxLength": 120 },
+        "authorRole": { "type": "string", "maxLength": 120 },
+        "rating": { "type": "integer" },
+        "category": { "type": "string", "maxLength": 80 },
+        "imageUrl": { "type": "string", "maxLength": 250000 },
+        "sortOrder": { "type": "integer" },
+        "status": { "type": "string", "enum": ["published", "draft"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "section", "title", "status", "createdAt", "updatedAt"]
+    },
+    "MarketingItem": {
+      "title": "MarketingItem",
+      "description": "SEO meta configuration, promotional banner, or social media link.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "kind": { "type": "string", "enum": ["seo_page", "banner", "social_link"] },
+        "pageKey": { "type": "string", "maxLength": 80 },
+        "metaTitle": { "type": "string", "maxLength": 160 },
+        "metaDescription": { "type": "string", "maxLength": 320 },
+        "keywords": { "type": "string", "maxLength": 300 },
+        "bannerTitle": { "type": "string", "maxLength": 160 },
+        "bannerCta": { "type": "string", "maxLength": 80 },
+        "platform": { "type": "string", "maxLength": 60 },
+        "url": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "kind", "status", "createdAt", "updatedAt"]
+    },
+    "SiteSetting": {
+      "title": "SiteSetting",
+      "description": "General, website, email, and payment gateway configuration document.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "group": { "type": "string", "enum": ["general", "website", "email", "payment"] },
+        "siteName": { "type": "string", "maxLength": 120 },
+        "tagline": { "type": "string", "maxLength": 200 },
+        "contactEmail": { "type": "string", "maxLength": 160 },
+        "contactPhone": { "type": "string", "maxLength": 40 },
+        "address": { "type": "string", "maxLength": 300 },
+        "currency": { "type": "string", "maxLength": 12 },
+        "timezone": { "type": "string", "maxLength": 60 },
+        "taxPercent": { "type": "number" },
+        "smtpHost": { "type": "string", "maxLength": 120 },
+        "smtpPort": { "type": "integer" },
+        "smtpUser": { "type": "string", "maxLength": 120 },
+        "razorpayEnabled": { "type": "boolean" },
+        "stripeEnabled": { "type": "boolean" },
+        "upiEnabled": { "type": "boolean" },
+        "bankDetails": { "type": "string", "maxLength": 400 },
+        "maintenanceMode": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "group", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Authorized administrator profiles and role bindings."
+    },
+    "/adminInvites/{email}": {
+      "schema": { "$ref": "#/entities/AdminInvite" },
+      "description": "Admin role invitations keyed by normalized email address."
+    },
+    "/destinations/{destinationId}": {
+      "schema": { "$ref": "#/entities/Destination" },
+      "description": "Destinations catalog managed from the admin panel."
+    },
+    "/packages/{packageId}": {
+      "schema": { "$ref": "#/entities/TourPackage" },
+      "description": "Tour packages linked to destinations."
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/Customer" },
+      "description": "Customer profiles containing PII (restricted to verified admins)."
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Customer bookings linked to customers, destinations, packages, and vehicles."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/Payment" },
+      "description": "Payment transaction records linked to bookings."
+    },
+    "/enquiries/{enquiryId}": {
+      "schema": { "$ref": "#/entities/Enquiry" },
+      "description": "Contact form, tour, and custom trip enquiries."
+    },
+    "/vehicles/{vehicleId}": {
+      "schema": { "$ref": "#/entities/Vehicle" },
+      "description": "Transportation fleet inventory and driver assignments."
+    },
+    "/cmsItems/{itemId}": {
+      "schema": { "$ref": "#/entities/CmsItem" },
+      "description": "Website CMS blocks, testimonials, FAQs, gallery, and blog posts."
+    },
+    "/marketing/{campaignId}": {
+      "schema": { "$ref": "#/entities/MarketingItem" },
+      "description": "SEO metadata, promotional banners, and social links."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/SiteSetting" },
+      "description": "Application general, website, email, and payment settings."
+    }
+  }
+}

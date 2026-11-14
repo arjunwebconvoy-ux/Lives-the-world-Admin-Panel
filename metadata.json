@@ -1,0 +1,6 @@
+{
+  "name": "Live The World — Admin Panel",
+  "description": "Dynamic travel and tourism administration dashboard for Live The World to manage destinations, tour packages, bookings, customers, fleet, enquiries, CMS content, SEO, and settings.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
